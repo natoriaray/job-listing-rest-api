@@ -1,6 +1,6 @@
 from db import db
 
-class EmployerModel(db.Model)
+class EmployerModel(db.Model):
     __tablename__ = "employers"
 
     id = db.Column(db.Integer, primary_key=True)
