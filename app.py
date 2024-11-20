@@ -4,6 +4,8 @@ from flask import Flask
 from flask_smorest import Api
 from db import db
 
+from resources.employer import blp as EmployerBlueprint
+
 def create_app(db_url=None):
     app = Flask(__name__)
 
@@ -19,6 +21,8 @@ def create_app(db_url=None):
     db.init.app(app)
 
     api = Api(app)
+
+    api.register_blueprint(EmployerBlueprint)
 
     with app.app_context():
         db.create_all()
