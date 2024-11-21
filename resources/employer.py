@@ -1,5 +1,5 @@
 from flask import request
-from flask.views import Methodview
+from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -9,7 +9,7 @@ from models import EmployerModel
 blp = Blueprint("employer", __name__, description="Operation on employer")
 
 @blp.route("/employer")
-class EmployerList(Methodview):
+class EmployerList(MethodView):
     def get(self):
         return EmployerModel.query.all()
     
@@ -25,8 +25,8 @@ class EmployerList(Methodview):
             abort(message="There was an error when creating the employer")
             
 
-@blp.route("employer/<int:employer_id>")
-class Employer(Methodview):
+@blp.route("/employer/<int:employer_id>")
+class Employer(MethodView):
     def get(self, employer_id):
         employer = EmployerModel.query.get_or_404(employer_id)
         return employer
