@@ -5,14 +5,18 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from db import db
 from models import EmployerModel
+from schemas import EmployerSchema, FullEmployerSchema
 
 blp = Blueprint("employer", __name__, description="Operation on employer")
 
 @blp.route("/employer")
 class EmployerList(MethodView):
+    @blp.response(200, FullEmployerSchema(many=True))
     def get(self):
         return EmployerModel.query.all()
     
+    @blp.arguments(EmployerSchema)
+    @blp.response(200, FullEmployerSchema)
     def post(self, employer_data):
         employer = EmployerModel(**employer_data)
 
@@ -20,13 +24,16 @@ class EmployerList(MethodView):
             db.session.add(employer)
             db.session.commit()
         except IntegrityError:
-            abort(message="An employer with that name already exists")
+            abort(400, message="An employer with that name already exists")
         except SQLAlchemyError:
-            abort(message="There was an error when creating the employer")
+            abort(500, message="There was an error when creating the employer")
+        
+        return employer
             
 
 @blp.route("/employer/<int:employer_id>")
 class Employer(MethodView):
+    @blp.response(200, FullEmployerSchema)
     def get(self, employer_id):
         employer = EmployerModel.query.get_or_404(employer_id)
         return employer
