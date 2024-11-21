@@ -5,6 +5,7 @@ from flask_smorest import Api
 from db import db
 
 from resources.employer import blp as EmployerBlueprint
+from resources.job import blp as JobBlueprint
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -23,6 +24,7 @@ def create_app(db_url=None):
     api = Api(app)
 
     api.register_blueprint(EmployerBlueprint)
+    api.register_blueprint(JobBlueprint)
 
     with app.app_context():
         db.create_all()
