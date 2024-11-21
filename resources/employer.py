@@ -7,7 +7,7 @@ from db import db
 from models import EmployerModel
 from schemas import EmployerSchema, FullEmployerSchema
 
-blp = Blueprint("employer", __name__, description="Operation on employer")
+blp = Blueprint("employer", __name__, description="Operations on employers")
 
 @blp.route("/employer")
 class EmployerList(MethodView):
