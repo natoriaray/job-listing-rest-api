@@ -4,7 +4,7 @@ from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from db import db
-from models import JobModel
+from models import JobModel, EmployerModel
 from schemas import JobSchema
 
 blp = Blueprint("job", __name__, description="Operations on jobs")
@@ -61,7 +61,9 @@ class Job(MethodView):
 
 @blp.route("/employer/<int:employer_id>/job")
 class JobsWithEmployer(MethodView):
+    @blp.response(200, JobSchema(many=True))
     def get(self, employer_id):
-        pass
+        employer = EmployerModel.query.get_or_404(employer_id)
+        return employer.jobs.all()
 
 
