@@ -39,24 +39,28 @@ class Job(MethodView):
     def put(self, job_data, job_id):
         job = JobModel.query.get_or_404(job_id)
 
-        if job:
-            job.title = job_data["title"]
-            job.description = job_data["description"]
-            job.salary = job_data["salary"]
-            job.city = job_data["city"]
-            job.state = job_data["state"]
-            job.employer_id = job_data["employer_id"]
-        else:
-            job = JobModel(**job_data)
+        job.title = job_data["title"]
+        job.description = job_data["description"]
+        job.salary = job_data["salary"]
+        job.city = job_data["city"]
+        job.state = job_data["state"]
+        job.employer_id = job_data["employer_id"]
 
+        db.session.commit()
+            
         return job
 
     def delete(self, job_id):
-        pass
+        job = JobModel.query.get_or_404(job_id)
+
+        db.session.delete(job)
+        db.session.commit()
+
+        return {"message": "Job deleted"}
 
 
 @blp.route("/employer/<int:employer_id>/job")
-class JobWithEmployer(MethodView):
+class JobsWithEmployer(MethodView):
     def get(self, employer_id):
         pass
 
