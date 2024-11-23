@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from db import db
 from models import EmployerModel
-from schemas import EmployerSchema, FullEmployerSchema
+from schemas import FullEmployerSchema
 
 blp = Blueprint("employer", __name__, description="Operations on employers")
 
@@ -15,7 +15,7 @@ class EmployerList(MethodView):
     def get(self):
         return EmployerModel.query.all()
     
-    @blp.arguments(EmployerSchema)
+    @blp.arguments(FullEmployerSchema)
     @blp.response(200, FullEmployerSchema)
     def post(self, employer_data):
         employer = EmployerModel(**employer_data)
