@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields
 from marshmallow.validate import OneOf
 
 states = [
@@ -16,12 +16,12 @@ class EmployerSchema(Schema):
 class JobSchema(Schema):
     id = fields.Int(dump_only=True)
     title = fields.Str(required=True)
-    description = fields.Str()
-    salary = fields.Int()
-    city = fields.Str()
-    state = fields.Str(validate=OneOf(states))
+    description = fields.Str(required=True)
+    salary = fields.Int(required=True)
+    city = fields.Str(required=True)
+    state = fields.Str(required=True, validate=OneOf(states))
     employer_id = fields.Int(required=True, load_only=True)
-    employer = fields.List(fields.Nested(EmployerSchema), dump_only=True)
+    employer = fields.Nested(EmployerSchema(), dump_only=True)
 
 class FullEmployerSchema(EmployerSchema):
     jobs = fields.List(fields.Nested(JobSchema), dump_only=True)
